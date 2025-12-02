@@ -96,3 +96,4 @@ export function buildGronerPayload(conversation) {0
     contato_telefone: conversation.phone
   };
 }
+
