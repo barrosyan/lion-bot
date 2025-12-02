@@ -1,9 +1,12 @@
-import express from 'express';
+import express from "express";
+import dotenv from "dotenv";
+import whatsappRoutes from "./routes/whatsapp.js";
+import { upload } from "./services/storageService.js";
 import cors from 'cors';
 
-const app = express();
+dotenv.config();
 
-// CORS liberado totalmente — ideal para testes
+const app = express();
 app.use(cors({
   origin: '*',
   methods: ['GET', 'POST', 'OPTIONS'],
@@ -11,25 +14,13 @@ app.use(cors({
 }));
 
 app.use(express.json());
+app.use("/uploads", express.static("uploads"));
 
-// Endpoint do webhook
-app.post('/webhook', (req, res) => {
-  const { from, body } = req.body;
+app.use("/whatsapp", whatsappRoutes);
 
-  console.log("Recebido:", req.body);
-
-  // Simule qualquer resposta que quiser
-  res.json({
-    reply: `Recebi a mensagem: ${body} (de ${from})`
-  });
+app.post("/upload", upload.single("file"), (req, res) => {
+  res.json({ message: "Upload concluído!", path: req.file.path });
 });
 
-// Preflight (OPTIONS)
-app.options('/webhook', (req, res) => {
-  res.sendStatus(200);
-});
-
-// Inicialização
-app.listen(3000, () => {
-  console.log('Servidor rodando em http://localhost:3000');
-});
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`🚀 Servidor rodando na porta ${PORT}`));
