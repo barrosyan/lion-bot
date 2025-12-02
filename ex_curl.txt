@@ -1,0 +1,6 @@
+curl -X POST http://localhost:3000/webhook \
+  -H "Content-Type: application/json" \
+  -d '{
+    "from": "5584999990000",
+    "body": "oi"
+  }'
