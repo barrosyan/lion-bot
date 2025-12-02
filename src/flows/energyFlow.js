@@ -65,3 +65,4 @@ export function buildGronerPayload(conversation) {
     origem: "whatsapp_postvenda"
   };
 }
+
